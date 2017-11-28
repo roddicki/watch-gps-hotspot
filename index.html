@@ -46,7 +46,7 @@ var hotspot = {
   makeVisible: true,
   showMap: true,
   mapZoom: 18, //1-20
-  corner1Lat: 51.441715,
+  corner1Lat: 51.441815,
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
@@ -75,6 +75,8 @@ function initMap() {
           };
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
+          //check position initally
+          checkPosition(pos);
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
@@ -85,7 +87,9 @@ function checkPosition(position) {
   var lat = position.coords.latitude;
   var lon = position.coords.longitude;
   console.log("latitude:" + lat + " Longitude:" + lon);
-  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
+  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
+
+  if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     inHotspot = true;
   } else {
