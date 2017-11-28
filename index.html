@@ -51,7 +51,7 @@ var hotspot = {
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
   onEnterLoadPage: false,
-  onExitLoadPage: "dummy.html",
+  onExitLoadPage: false, //"dummy.html",
   onEnterPlayAudio: "WhiteChristmas.mp3",
   onExitPlayAudio: false
 }
@@ -104,9 +104,9 @@ function watchLocation() {
 function checkPosition(position) {
   var lat = position.coords.latitude;
   var lon = position.coords.longitude;
-  console.log("latitude:" + lat + " Longitude:" + lon);
+  console.log(" running checkPosition latitude:" + lat + " Longitude:" + lon);
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
-    document.getElementById('msg').innerHTML = "In the hotspot";
+    document.getElementById('msg').innerHTML = "In the hotspot + ";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
       localStorage.setItem("hotspotState", "haveEntered");
       document.getElementById('msg').innerHTML += "entering"
@@ -122,7 +122,7 @@ function checkPosition(position) {
       localStorage.setItem("hotspotState", "haveExited");
       document.getElementById('msg').innerHTML += "exiting"
       return "exiting";
-    }else {
+    } else {
       localStorage.setItem("hotspotState", "haveExited");
       document.getElementById('msg').innerHTML += "outside"
       return "outside";
