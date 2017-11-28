@@ -34,8 +34,8 @@
   <div class="row">
     <div class="col-sm-12">
       <p id="demo"></p>
-      <div id="mapholder"></div>
       <p id="msg"></p>
+      <div id="mapholder"></div>
     </div>
   </div>  
 </div>
@@ -63,6 +63,7 @@ var hotspot = {
 
 //global google map and marker
 var gMap, marker;
+var inHotspot = false;
 
 //Initialise map from maps.googleapis.com/maps/api callback
 function initMap() {
@@ -75,10 +76,9 @@ function initMap() {
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
         }, showError, { timeout: 15000, enableHighAccuracy: true });
-    } else { 
+  } else { 
         alert("Geolocation is not supported by this browser.");
-    }
-    
+  }
 }
 
 function checkPosition(position) {
@@ -86,9 +86,11 @@ function checkPosition(position) {
   var lon = position.coords.longitude;
   console.log("latitude:" + lat + " Longitude:" + lon);
   if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
-    document.getElementById('msg').innerHTML = "In the hotspot"
+    document.getElementById('msg').innerHTML = "In the hotspot";
+    inHotspot = true;
   } else {
-    document.getElementById('msg').innerHTML = "NOT in the hotspot"
+    document.getElementById('msg').innerHTML = "NOT in the hotspot";
+    inHotspot = false;
   };
 }
 
