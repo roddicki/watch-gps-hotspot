@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include meta tag to ensure proper rendering and touch zooming -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Include jQuery Mobile stylesheets -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style>
+#greenbtn {
+  background-color: #14b14d;
+  border-color: #188237;
+  color: #333;
+  text-shadow: 0 1px 0 #0e4c18;
+}
+
+#mapholder {
+  width: 100%;
+  height: 300px;
+  border: 1px solid red;
+}
+  </style>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>GPS Test</h1>
+  <p>This page tracks your GPS location</p> 
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <p id="demo"></p>
+      <div id="mapholder">
+    </div>
+
+
+<script>
+var hotspot = {
+  //true or false must be lowercase
+  makeVisible: true,
+  showMap: true,
+  mapZoom: 17, //1-20
+  corner1Lat: 51.441571,
+  corner1Lon: -2.571883,
+  corner2Lat: 51.441662,
+  corner2Lon: -2.571748,
+  enterLoadPage: false,
+  exitLoadPage: false,
+  enterPlayAudio: false,
+  exitPlayAudio: false
+}
+
+</script>
+
+
+<script>
+function init() {
+  if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          if (hotspot.showMap == true) {
+            drawMap(pos);  
+          };
+          if (hotspot.makeVisible == true) {drawHotSpot()};
+        }, showError, { timeout: 15000, enableHighAccuracy: true });
+    } else { 
+        alert("Geolocation is not supported by this browser.");
+    }
+    
+}
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(function(pos) {
+          displayPositionCoords(pos);
+          drawCurrPosition(pos);
+          panMap(pos);
+          checkPosition(pos);
+        }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true });
+    } else { 
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+
+
+/*function checkHotspot(latCenter, lonCenter, latCurr, lonCurr, dist, map) {
+  //10 m = 0001 deg ish
+  var radius = dist/100000;
+  console.log(radius);
+  console.log('centre: ' + latCenter +" , " + lonCenter);
+  console.log('current: ' + latCurr +" , " + lonCurr);
+  var latCenterN = latCenter + radius;
+  var latCenterS = latCenter - radius;
+  console.log('edge: N:' + latCenterN + " and S:" + latCenterS );
+  var lonCenterE = lonCenter + radius;
+  var lonCenterW = lonCenter - radius;
+  console.log('edge W:' + lonCenterW + " and E:" + lonCenterE );
+  if (latCurr > latCenterS && latCurr < latCenterN ) {
+    alert('in the zone');
+  } else {
+    alert('not in the zone');
+  }
+  //draw hot spot 
+    var rectangle = new google.maps.Rectangle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: map,
+      bounds: {
+        north: latCenterN,
+        south: latCenterS,
+        east: lonCenterE,
+        west: lonCenterW
+      }
+    });
+    rectangle.setMap(map);
+
+}*/
+
+//global google map
+var gMap;
+
+function drawMap(position) {
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    latlon = new google.maps.LatLng(lat, lon)
+  
+    var myOptions = {
+      center:latlon,zoom:hotspot.mapZoom,
+      mapTypeId:google.maps.MapTypeId.ROADMAP,
+      mapTypeControl:false,
+      navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+    }
+    //assign global gMap
+    gMap = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+}
+
+function drawCurrPosition(position) {
+  var marker = new google.maps.Marker({position:latlon,map:gMap,title:"You are here!"});
+}
+
+function drawHotSpot() {
+    var hotspotShape = new google.maps.Rectangle({
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    map: gMap,
+    bounds: {
+      north: hotspot.corner1Lat,
+      south: hotspot.corner2Lat,
+      east: hotspot.corner2Lon,
+      west: hotspot.corner1Lon
+    }
+  });
+}
+
+function panMap(position){
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    var center = new google.maps.LatLng(lat, lon);
+    // using global variable:
+    gMap.panTo(center);
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+
+function checkPosition(position) {
+  console.log("latitude:" + position.coords.latitude + " Longitude:" + position.coords.longitude);
+}
+
+function displayPositionCoords(position) {
+  var x = document.getElementById("demo");
+  x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
+}
+
+init();
+getLocation();
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjLeRLiyFRozzXOWwozrC4bVkzGevJTss">
+</script>
+
+<script>
+
+
+</script>
+	</div>
+		
+</div>
+</body>
+</html>
