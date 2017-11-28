@@ -60,6 +60,7 @@ var hotspot = {
 
 
 <script>
+localStorage.clear();
 
 //global google map and marker
 var gMap, marker;
@@ -108,8 +109,8 @@ function checkPosition(position) {
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
-        localStorage.setItem("hotspotState", "haveEntered");
-        return "entering";
+      localStorage.setItem("hotspotState", "haveEntered");
+      return "entering";
     } else {
       localStorage.setItem("hotspotState", "haveEntered");
       return "inside";
@@ -209,49 +210,7 @@ function displayPositionCoords(position) {
   var x = document.getElementById("demo");
   x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
 }
-
-
-
-
-/*function checkHotspot(latCenter, lonCenter, latCurr, lonCurr, dist, map) {
-  //10 m = 0001 deg ish
-  var radius = dist/100000;
-  console.log(radius);
-  console.log('centre: ' + latCenter +" , " + lonCenter);
-  console.log('current: ' + latCurr +" , " + lonCurr);
-  var latCenterN = latCenter + radius;
-  var latCenterS = latCenter - radius;
-  console.log('edge: N:' + latCenterN + " and S:" + latCenterS );
-  var lonCenterE = lonCenter + radius;
-  var lonCenterW = lonCenter - radius;
-  console.log('edge W:' + lonCenterW + " and E:" + lonCenterE );
-  if (latCurr > latCenterS && latCurr < latCenterN ) {
-    alert('in the zone');
-  } else {
-    alert('not in the zone');
-  }
-  //draw hot spot 
-    var rectangle = new google.maps.Rectangle({
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FF0000',
-      fillOpacity: 0.35,
-      map: map,
-      bounds: {
-        north: latCenterN,
-        south: latCenterS,
-        east: lonCenterE,
-        west: lonCenterW
-      }
-    });
-    rectangle.setMap(map);
-
-}*/
-
-
 </script>
-
 
 
 <script async defer
