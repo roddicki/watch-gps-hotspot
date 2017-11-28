@@ -36,9 +36,6 @@
       <p id="demo"></p>
       <div id="mapholder">
     </div>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjLeRLiyFRozzXOWwozrC4bVkzGevJTss&callback=initMap">
-</script>
 
 <script>
 var hotspot = {
@@ -60,14 +57,19 @@ var hotspot = {
 
 
 <script>
+
+//global google map and marker
+var gMap, marker;
+
 function initMap() {
   if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
           if (hotspot.showMap == true) {
-            drawMap(pos);  
+            drawMap(pos);
+            drawMarker(pos);  
           };
           if (hotspot.makeVisible == true) {drawHotSpot()};
-          getLocation();
+          watchLocation();
         }, showError, { timeout: 15000, enableHighAccuracy: true });
     } else { 
         alert("Geolocation is not supported by this browser.");
@@ -75,12 +77,62 @@ function initMap() {
     
 }
 
+//DRAW MAP INITIALLY
+function drawMap(position) {
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    latlon = new google.maps.LatLng(lat, lon)
+  
+    var myOptions = {
+      center:latlon,zoom:hotspot.mapZoom,
+      mapTypeId:google.maps.MapTypeId.ROADMAP,
+      mapTypeControl:false,
+      navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+    }
+    //assign global gMap
+    gMap = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+}
 
-function getLocation() {
+//DRAW MARKER INITIALLY
+function drawMarker(position) {
+  //assign global marker
+  marker = new google.maps.Marker({position:latlon,map:gMap,title:"You are here!"});
+}
+
+//DRAW HOTSPOT INITIALLY
+function drawHotSpot() {
+    var hotspotShape = new google.maps.Rectangle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#FF0000',
+      fillOpacity: 0.35,
+      map: gMap,
+      bounds: {
+        north: hotspot.corner1Lat,
+        south: hotspot.corner2Lat,
+        east: hotspot.corner2Lon,
+        west: hotspot.corner1Lon
+      }
+    });
+}
+
+//PAN MAP AND MARKER
+function panMap(position){
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    var center = new google.maps.LatLng(lat, lon);
+    // using global variable:
+    gMap.panTo(center);
+    marker.setPosition(center);
+}
+
+
+function watchLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(pos) {
           displayPositionCoords(pos);
-          drawCurrPosition(pos);
+          
           panMap(pos);
           checkPosition(pos);
         }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true });
@@ -88,6 +140,35 @@ function getLocation() {
         alert("Geolocation is not supported by this browser.");
     }
 }
+
+
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
+}
+
+function checkPosition(position) {
+  console.log("latitude:" + position.coords.latitude + " Longitude:" + position.coords.longitude);
+}
+
+function displayPositionCoords(position) {
+  var x = document.getElementById("demo");
+  x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
+}
+
 
 
 
@@ -127,89 +208,14 @@ function getLocation() {
 
 }*/
 
-//global google map
-var gMap;
-
-function drawMap(position) {
-    lat = position.coords.latitude;
-    lon = position.coords.longitude;
-    latlon = new google.maps.LatLng(lat, lon)
-  
-    var myOptions = {
-      center:latlon,zoom:hotspot.mapZoom,
-      mapTypeId:google.maps.MapTypeId.ROADMAP,
-      mapTypeControl:false,
-      navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
-    }
-    //assign global gMap
-    gMap = new google.maps.Map(document.getElementById("mapholder"), myOptions);
-}
-
-function drawCurrPosition(position) {
-  var marker = new google.maps.Marker({position:latlon,map:gMap,title:"You are here!"});
-}
-
-function drawHotSpot() {
-    var hotspotShape = new google.maps.Rectangle({
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35,
-    map: gMap,
-    bounds: {
-      north: hotspot.corner1Lat,
-      south: hotspot.corner2Lat,
-      east: hotspot.corner2Lon,
-      west: hotspot.corner1Lon
-    }
-  });
-}
-
-function panMap(position){
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
-    var center = new google.maps.LatLng(lat, lon);
-    // using global variable:
-    gMap.panTo(center);
-}
-
-function showError(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.");
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable.");
-            break;
-        case error.TIMEOUT:
-            alert("The request to get user location timed out.");
-            break;
-        case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred.");
-            break;
-    }
-}
-
-function checkPosition(position) {
-  console.log("latitude:" + position.coords.latitude + " Longitude:" + position.coords.longitude);
-}
-
-function displayPositionCoords(position) {
-  var x = document.getElementById("demo");
-  x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
-}
-
-
-
 </script>
 
 
 
-<script>
-
-
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjLeRLiyFRozzXOWwozrC4bVkzGevJTss&callback=initMap">
 </script>
+
 	</div>
 		
 </div>
