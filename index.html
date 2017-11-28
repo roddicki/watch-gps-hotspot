@@ -67,6 +67,7 @@ function initMap() {
             drawMap(pos);  
           };
           if (hotspot.makeVisible == true) {drawHotSpot()};
+          getLocation();
         }, showError, { timeout: 15000, enableHighAccuracy: true });
     } else { 
         alert("Geolocation is not supported by this browser.");
@@ -199,8 +200,8 @@ function displayPositionCoords(position) {
   x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
 }
 
-init();
-//getLocation();
+
+
 </script>
 
 
