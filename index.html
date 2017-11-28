@@ -94,12 +94,12 @@ function checkPosition(position) {
     if (localStorage.getItem("hotspotState") != "haveEntered") {
       Alert("entering hotspot");
     };
-    localStorage.setItem("hotspotState": "haveEntered");
+    localStorage.setItem("hotspotState", "haveEntered");
   } else {
     document.getElementById('msg').innerHTML = "NOT in the hotspot";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
       Alert("exiting hotspot");
-      localStorage.setItem("hotspotState": "haveExited");
+      localStorage.setItem("hotspotState", "haveExited");
     };
   };
 }
