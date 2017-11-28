@@ -46,7 +46,7 @@ var hotspot = {
   makeVisible: true,
   showMap: true,
   mapZoom: 18, //1-20
-  corner1Lat: 51.441615, //51.441615
+  corner1Lat: 51.441815, //51.441615
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
@@ -77,7 +77,7 @@ function initMap() {
           watchLocation();
           //check position initally
           //checkPosition(pos);
-          enteringHotspot(pos);
+          //enteringHotspot(pos);
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
