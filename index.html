@@ -110,18 +110,22 @@ function checkPosition(position) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
       localStorage.setItem("hotspotState", "haveEntered");
+      document.getElementById('msg').innerHTML += "entering"
       return "entering";
     } else {
       localStorage.setItem("hotspotState", "haveEntered");
+      document.getElementById('msg').innerHTML += "inside"
       return "inside";
     };
   } else {
-    document.getElementById('msg').innerHTML = "NOT in the hotspot";
+    document.getElementById('msg').innerHTML = "NOT in the hotspot + ";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
       localStorage.setItem("hotspotState", "haveExited");
+      document.getElementById('msg').innerHTML += "exiting"
       return "exiting";
     }else {
       localStorage.setItem("hotspotState", "haveExited");
+      document.getElementById('msg').innerHTML += "outside"
       return "outside";
     };
   };
