@@ -8,7 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <style>
+<style>
 #greenbtn {
   background-color: #14b14d;
   border-color: #188237;
@@ -21,7 +21,8 @@
   height: 300px;
   border: 1px solid red;
 }
-  </style>
+</style>
+
 </head>
 <body>
 
@@ -43,16 +44,16 @@
 <script>
 var hotspot = {
   //true or false must be lowercase
-  makeVisible: true,
-  showMap: true,
-  mapZoom: 18, //1-20
-  corner1Lat: 51.441615, //51.441615 //51.443615
+  makeVisible: true,                      //true or false
+  showMap: true,                          //true or false
+  mapZoom: 18,                            //1-20
+  corner1Lat: 51.441615,                  //51.441615 //51.443615
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
-  onEnterLoadPage: false,
-  onExitLoadPage: false, //"dummy.html",
-  onEnterPlayAudio: "WhiteChristmas.mp3",
+  onEnterLoadPage: false,                 //eg "dummy.html" or false
+  onExitLoadPage: false,                  //eg "dummy.html" or false
+  onEnterPlayAudio: "WhiteChristmas.mp3", //or false
   onExitPlayAudio: false
 }
 
