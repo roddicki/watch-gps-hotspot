@@ -95,7 +95,10 @@ function watchLocation() {
       if (haveEnteredExited == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
       if (haveEnteredExited == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
       //play audio on entering and exiting
-      if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
+      if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {
+        document.getElementById('msg').innerHTML += " play audio"
+        playAudio(hotspot.onEnterPlayAudio)
+      };
       if (haveEnteredExited == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
     }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
