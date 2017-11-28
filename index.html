@@ -69,17 +69,17 @@ var inHotspot = false;
 //Initialise map from maps.googleapis.com/maps/api callback
 function initMap() {
   if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          if (hotspot.showMap == true) {
-            drawMap(pos);
-            drawMarker(pos);  
-          };
-          if (hotspot.makeVisible == true) {drawHotSpot()};
-          watchLocation();
-          //check position initally
-        }, showError, { timeout: 15000, enableHighAccuracy: true });
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        if (hotspot.showMap == true) {
+          drawMap(pos);
+          drawMarker(pos);  
+        };
+        if (hotspot.makeVisible == true) {drawHotSpot()};
+        watchLocation();
+        //check position initally
+      }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
-        alert("Geolocation is not supported by this browser.");
+      alert("Geolocation is not supported by this browser.");
   }
 }
 
@@ -96,41 +96,41 @@ function watchLocation() {
       if (haveEnteredExited == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
       //play audio on entering and exiting
       if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {
-        document.getElementById('msg').innerHTML += " play audio"
-        playAudio(hotspot.onEnterPlayAudio)
+        document.getElementById('msg').innerHTML += " play audio";
+        playAudio(hotspot.onEnterPlayAudio);
       };
       if (haveEnteredExited == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
-    }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
+    }, showError, { timeout: 25000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
 //CHECK POSITION EVERY TIME watchPosition executes
 function checkPosition(position) {
-  var lat = position.coords.latitude;
-  var lon = position.coords.longitude;
-  console.log(" running checkPosition latitude:" + lat + " Longitude:" + lon);
-  if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
-    document.getElementById('msg').innerHTML = "In the hotspot + ";
-    if (localStorage.getItem("hotspotState") != "haveEntered") {
-      localStorage.setItem("hotspotState", "haveEntered");
-      document.getElementById('msg').innerHTML += "entering"
-      return "entering";
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    console.log(" running checkPosition latitude:" + lat + " Longitude:" + lon);
+    if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
+      document.getElementById('msg').innerHTML = "In the hotspot + ";
+      if (localStorage.getItem("hotspotState") != "haveEntered") {
+        localStorage.setItem("hotspotState", "haveEntered");
+        document.getElementById('msg').innerHTML += "entering"
+        return "entering";
+      } else {
+        localStorage.setItem("hotspotState", "haveEntered");
+        document.getElementById('msg').innerHTML += "inside"
+        return "inside";
+      };
     } else {
-      localStorage.setItem("hotspotState", "haveEntered");
-      document.getElementById('msg').innerHTML += "inside"
-      return "inside";
+      document.getElementById('msg').innerHTML = "NOT in the hotspot + ";
+      if (localStorage.getItem("hotspotState") == "haveEntered") {
+        localStorage.setItem("hotspotState", "haveExited");
+        document.getElementById('msg').innerHTML += "exiting"
+        return "exiting";
+      } else {
+        localStorage.setItem("hotspotState", "haveExited");
+        document.getElementById('msg').innerHTML += "outside"
+        return "outside";
+      };
     };
-  } else {
-    document.getElementById('msg').innerHTML = "NOT in the hotspot + ";
-    if (localStorage.getItem("hotspotState") == "haveEntered") {
-      localStorage.setItem("hotspotState", "haveExited");
-      document.getElementById('msg').innerHTML += "exiting"
-      return "exiting";
-    } else {
-      localStorage.setItem("hotspotState", "haveExited");
-      document.getElementById('msg').innerHTML += "outside"
-      return "outside";
-    };
-  };
 }
 
 //DRAW MAP INITIALLY
@@ -151,8 +151,8 @@ function drawMap(position) {
 
 //DRAW MARKER INITIALLY
 function drawMarker(position) {
-  //assign global marker
-  marker = new google.maps.Marker({position:latlon,map:gMap,title:"You are here!"});
+    //assign global marker
+    marker = new google.maps.Marker({position:latlon,map:gMap,title:"You are here!"});
 }
 
 //DRAW HOTSPOT INITIALLY
