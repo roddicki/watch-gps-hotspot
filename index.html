@@ -46,13 +46,13 @@ var hotspot = {
   makeVisible: true,
   showMap: true,
   mapZoom: 18, //1-20
-  corner1Lat: 51.44615, //51.441615
+  corner1Lat: 51.441615, //51.441615 //51.443615
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
-  onEnterLoadPage: "dummy.html",
-  onExitLoadPage: false,
-  onEnterPlayAudio: false,
+  onEnterLoadPage: false,
+  onExitLoadPage: "dummy.html",
+  onEnterPlayAudio: "WhiteChristmas.mp3",
   onExitPlayAudio: false
 }
 
@@ -76,7 +76,13 @@ function initMap() {
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
           //check position initally
-          checkPosition(pos);
+          var haveEnteredExited = checkPosition(pos);
+          console.log(haveEnteredExited);
+          if (haveEnteredExited == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
+          if (haveEnteredExited == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
+          //play audio on entering and exiting
+          if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
+          if (haveEnteredExited == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
@@ -90,12 +96,7 @@ function watchLocation() {
       if (hotspot.showMap == true) {
         panMap(pos);
       };
-      //checkPosition(pos); //navigate to a page on entering and exiting
-      if (checkPosition(pos) == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
-      if (checkPosition(pos) == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
-      //play audio on entering and exiting
-      if (checkPosition(pos) == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
-      if (checkPosition(pos) == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
+      
     }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
@@ -107,14 +108,20 @@ function checkPosition(position) {
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
-      return "entering";
+        localStorage.setItem("hotspotState", "haveEntered");
+        return "entering";
+    } else {
+      localStorage.setItem("hotspotState", "haveEntered");
+      return "inside";
     };
-    localStorage.setItem("hotspotState", "haveEntered");
   } else {
     document.getElementById('msg').innerHTML = "NOT in the hotspot";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
-      return "exiting";
       localStorage.setItem("hotspotState", "haveExited");
+      return "exiting";
+    }else {
+      localStorage.setItem("hotspotState", "haveExited");
+      return "outside";
     };
   };
 }
@@ -169,9 +176,12 @@ function panMap(position){
     marker.setPosition(center);
 }
 
-
+//CREATE AN AUDIO ELEMENT AND PLAY 
 function playAudio(track) {
-    //
+    audio = document.createElement("audio");
+    audio.src = track;
+    document.body.appendChild(audio);
+    audio.play();
 }
 
 
