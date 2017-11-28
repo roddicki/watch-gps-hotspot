@@ -129,16 +129,13 @@ function panMap(position){
 
 
 function watchLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(pos) {
-          displayPositionCoords(pos);
-          
-          panMap(pos);
-          checkPosition(pos);
-        }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true });
-    } else { 
-        alert("Geolocation is not supported by this browser.");
-    }
+    navigator.geolocation.watchPosition(function(pos) {
+      displayPositionCoords(pos);
+      if (hotspot.showMap == true) {
+        panMap(pos);
+      };
+      checkPosition(pos);
+    }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
 
@@ -207,6 +204,7 @@ function displayPositionCoords(position) {
     rectangle.setMap(map);
 
 }*/
+
 
 </script>
 
