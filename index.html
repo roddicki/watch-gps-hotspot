@@ -46,7 +46,7 @@ var hotspot = {
   makeVisible: true,
   showMap: true,
   mapZoom: 18, //1-20
-  corner1Lat: 51.441615,
+  corner1Lat: 51.441615, //51.441615
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
@@ -92,13 +92,13 @@ function checkPosition(position) {
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
-      Alert("entering hotspot");
+      alert("entering hotspot");
     };
     localStorage.setItem("hotspotState", "haveEntered");
   } else {
     document.getElementById('msg').innerHTML = "NOT in the hotspot";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
-      Alert("exiting hotspot");
+      alert("exiting hotspot");
       localStorage.setItem("hotspotState", "haveExited");
     };
   };
