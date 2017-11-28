@@ -107,12 +107,14 @@ function checkPosition(position) {
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
+      alert("entering");
       return "entering";
     };
     localStorage.setItem("hotspotState", "haveEntered");
   } else {
     document.getElementById('msg').innerHTML = "NOT in the hotspot";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
+      alert("exiting");
       return "exiting";
       localStorage.setItem("hotspotState", "haveExited");
     };
