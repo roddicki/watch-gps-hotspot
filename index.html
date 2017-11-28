@@ -77,13 +77,6 @@ function initMap() {
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
           //check position initally
-          var haveEnteredExited = checkPosition(pos);
-          console.log(haveEnteredExited);
-          if (haveEnteredExited == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
-          if (haveEnteredExited == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
-          //play audio on entering and exiting
-          if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
-          if (haveEnteredExited == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
@@ -97,7 +90,13 @@ function watchLocation() {
       if (hotspot.showMap == true) {
         panMap(pos);
       };
-      
+      var haveEnteredExited = checkPosition(pos);
+      console.log(haveEnteredExited);
+      if (haveEnteredExited == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
+      if (haveEnteredExited == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
+      //play audio on entering and exiting
+      if (haveEnteredExited == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
+      if (haveEnteredExited == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
     }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
