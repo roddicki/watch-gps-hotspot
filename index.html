@@ -46,11 +46,11 @@ var hotspot = {
   makeVisible: true,
   showMap: true,
   mapZoom: 18, //1-20
-  corner1Lat: 51.441555, //51.441615
+  corner1Lat: 51.441615, //51.441615
   corner1Lon:  -2.572170,
   corner2Lat: 51.441356,
   corner2Lon: -2.571422,
-  onEnterLoadPage: false,
+  onEnterLoadPage: "dummy.html",
   onExitLoadPage: false,
   onEnterPlayAudio: false,
   onExitPlayAudio: false
@@ -76,59 +76,44 @@ function initMap() {
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
           //check position initally
-          //checkPosition(pos);
-          //enteringHotspot(pos);
+          checkPosition(pos);
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
   }
 }
 
-
-function enteringHotspot(position) {
-  var lat = position.coords.latitude;
-  var lon = position.coords.longitude;
-  console.log("latitude:" + lat + " Longitude:" + lon);
-  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
-  if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
-    document.getElementById('msg').innerHTML = "In the hotspot";
-    if (localStorage.getItem("hotspotState") != "haveEntered") {
-      alert("entering hotspot");
-    };
-    localStorage.setItem("hotspotState", "haveEntered");
-  } 
+//MONITOR LOCATION
+function watchLocation() {
+    navigator.geolocation.watchPosition(function(pos) {
+      displayPositionCoords(pos);
+      if (hotspot.showMap == true) {
+        panMap(pos);
+      };
+      //checkPosition(pos); //navigate to a page on entering and exiting
+      if (checkPosition(pos) == "entering" && hotspot.onEnterLoadPage != false) {window.location.href = hotspot.onEnterLoadPage};
+      if (checkPosition(pos) == "exiting" && hotspot.onExitLoadPage != false) {window.location.href = hotspot.onExitLoadPage};
+      //play audio on entering and exiting
+      if (checkPosition(pos) == "entering" && hotspot.onEnterPlayAudio != false) {playAudio(hotspot.onEnterPlayAudio)};
+      if (checkPosition(pos) == "exiting" && hotspot.onExitPlayAudio != false) {playAudio(hotspot.onExitPlayAudio)};
+    }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
-function exitingHotspot(position) {
-  var lat = position.coords.latitude;
-  var lon = position.coords.longitude;
-  console.log("latitude:" + lat + " Longitude:" + lon);
-  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
-  if ( !(lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && !(lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
-    document.getElementById('msg').innerHTML = "NOT in the hotspot";
-    if (localStorage.getItem("hotspotState") == "haveEntered") {
-      alert("exiting hotspot");
-      localStorage.setItem("hotspotState", "haveExited");
-    };
-  };
-}
-
+//CHECK POSITION EVERY TIME watchPosition executes
 function checkPosition(position) {
   var lat = position.coords.latitude;
   var lon = position.coords.longitude;
   console.log("latitude:" + lat + " Longitude:" + lon);
-  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
-
   if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
     document.getElementById('msg').innerHTML = "In the hotspot";
     if (localStorage.getItem("hotspotState") != "haveEntered") {
-      alert("entering hotspot");
+      return "entering";
     };
     localStorage.setItem("hotspotState", "haveEntered");
   } else {
     document.getElementById('msg').innerHTML = "NOT in the hotspot";
     if (localStorage.getItem("hotspotState") == "haveEntered") {
-      alert("exiting hotspot");
+      return "exiting";
       localStorage.setItem("hotspotState", "haveExited");
     };
   };
@@ -184,17 +169,9 @@ function panMap(position){
     marker.setPosition(center);
 }
 
-//MONITOR LOCATION
-function watchLocation() {
-    navigator.geolocation.watchPosition(function(pos) {
-      displayPositionCoords(pos);
-      if (hotspot.showMap == true) {
-        panMap(pos);
-      };
-      //checkPosition(pos);
-      enteringHotspot(pos);
-      exitingHotspot(pos);
-    }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
+
+function playAudio() {
+
 }
 
 
