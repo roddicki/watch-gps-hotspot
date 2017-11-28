@@ -76,11 +76,41 @@ function initMap() {
           if (hotspot.makeVisible == true) {drawHotSpot()};
           watchLocation();
           //check position initally
-          checkPosition(pos);
+          //checkPosition(pos);
+          enteringHotspot(pos);
         }, showError, { timeout: 15000, enableHighAccuracy: true });
   } else { 
         alert("Geolocation is not supported by this browser.");
   }
+}
+
+
+function enteringHotspot(position) {
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+  console.log("latitude:" + lat + " Longitude:" + lon);
+  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
+  if ( (lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && (lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
+    document.getElementById('msg').innerHTML = "In the hotspot";
+    if (localStorage.getItem("hotspotState") != "haveEntered") {
+      alert("entering hotspot");
+    };
+    localStorage.setItem("hotspotState", "haveEntered");
+  } 
+}
+
+function exitingHotspot(position) {
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+  console.log("latitude:" + lat + " Longitude:" + lon);
+  //  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
+  if ( !(lat > hotspot.corner2Lat && lat < hotspot.corner1Lat) && !(lon < hotspot.corner2Lon && lon > hotspot.corner1Lon) ) {
+    document.getElementById('msg').innerHTML = "NOT in the hotspot";
+    if (localStorage.getItem("hotspotState") == "haveEntered") {
+      alert("exiting hotspot");
+      localStorage.setItem("hotspotState", "haveExited");
+    };
+  };
 }
 
 function checkPosition(position) {
@@ -161,7 +191,9 @@ function watchLocation() {
       if (hotspot.showMap == true) {
         panMap(pos);
       };
-      checkPosition(pos);
+      //checkPosition(pos);
+      enteringHotspot(pos);
+      exitingHotspot(pos);
     }, showError, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }); 
 }
 
