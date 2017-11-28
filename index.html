@@ -35,6 +35,7 @@
     <div class="col-sm-12">
       <p id="demo"></p>
       <div id="mapholder">
+      <p id="msg"></p>
     </div>
 
 <script>
@@ -61,6 +62,7 @@ var hotspot = {
 //global google map and marker
 var gMap, marker;
 
+//Initialise map from maps.googleapis.com/maps/api callback
 function initMap() {
   if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
@@ -75,6 +77,17 @@ function initMap() {
         alert("Geolocation is not supported by this browser.");
     }
     
+}
+
+function checkPosition(position) {
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+  console.log("latitude:" + lat + " Longitude:" + lon);
+  if ( (lat > hotspot.corner1Lat && lat < hotspot.corner2Lat) && (lon > hotspot.corner2Lon && lon < hotspot.corner1Lon) ) {
+    document.getElementById('msg').innerHTML = "In the hotspot"
+  } else {
+    document.getElementById('msg').innerHTML = "NOT in the hotspot"
+  };
 }
 
 //DRAW MAP INITIALLY
@@ -127,7 +140,7 @@ function panMap(position){
     marker.setPosition(center);
 }
 
-
+//MONITOR LOCATION
 function watchLocation() {
     navigator.geolocation.watchPosition(function(pos) {
       displayPositionCoords(pos);
@@ -139,7 +152,7 @@ function watchLocation() {
 }
 
 
-
+//ERROR
 function showError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
@@ -157,9 +170,7 @@ function showError(error) {
     }
 }
 
-function checkPosition(position) {
-  console.log("latitude:" + position.coords.latitude + " Longitude:" + position.coords.longitude);
-}
+
 
 function displayPositionCoords(position) {
   var x = document.getElementById("demo");
