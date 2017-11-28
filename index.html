@@ -36,7 +36,9 @@
       <p id="demo"></p>
       <div id="mapholder">
     </div>
-
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjLeRLiyFRozzXOWwozrC4bVkzGevJTss&callback=initMap">
+</script>
 
 <script>
 var hotspot = {
@@ -58,7 +60,7 @@ var hotspot = {
 
 
 <script>
-function init() {
+function initMap() {
   if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
           if (hotspot.showMap == true) {
@@ -198,12 +200,10 @@ function displayPositionCoords(position) {
 }
 
 init();
-getLocation();
+//getLocation();
 </script>
 
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjLeRLiyFRozzXOWwozrC4bVkzGevJTss">
-</script>
+
 
 <script>
 
