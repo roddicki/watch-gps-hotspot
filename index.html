@@ -180,10 +180,17 @@ function panMap(position){
 
 //CREATE AN AUDIO ELEMENT AND PLAY 
 function playAudio(track) {
-    audio = document.createElement("audio");
+    var audio = document.getElementById('audio-player')
     audio.src = track;
-    document.body.appendChild(audio);
     audio.play();
+}
+
+//CREATE AN AUDIO ELEMENT AND PLAY 
+function buildAudio() {
+    var audio = document.createElement("audio");
+    audio.id = "audio-player"
+    audio.src = "";
+    document.body.appendChild(audio);
 }
 
 
@@ -212,7 +219,7 @@ function displayPositionCoords(position) {
   x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
 }
 
-playAudio(hotspot.onExitPlayAudio);
+buildAudio();
 </script>
 
 
