@@ -30,7 +30,10 @@
     <div class="col-sm-12">
       <p id="demo"></p>
       <p id="msg"></p>
-      <button type="button" onclick="playAudio(hotspot.onEnterPlayAudio)" class="btn-primary">I am here</button>
+      <p>
+      <button type="button" onclick="playAudio(hotspot.onEnterPlayAudio)" class=" .
+      btn-block btn-primary">I am here</button>
+    </p>
       <div id="mapholder"></div>
 
     </div>
@@ -44,7 +47,7 @@ var hotspot = {
   makeVisible: true,                      //true or false
   showMap: true,                          //true or false
   mapZoom: 18,                            //1-20
-  corner1Lat: 51.441899,                  //51.441615 //51.443615
+  corner1Lat: 51.441678,                  //51.441615 //51.443615
   corner1Lon:  -2.572201,
   corner2Lat: 51.441438,
   corner2Lon:  -2.571278,
@@ -179,6 +182,14 @@ function panMap(position){
     // using global variable:
     gMap.panTo(center);
     marker.setPosition(center);
+}
+
+//QUEUE AUDIO to get round not being able to autoplay
+function queueAudio() {
+    alert("queueAudio");
+    var audio = document.getElementById('audio-player')
+    audio.src = track;
+    audio.pause();
 }
 
 //CREATE AN AUDIO ELEMENT AND PLAY 
