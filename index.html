@@ -223,8 +223,12 @@ function displayPositionCoords(position) {
   x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
 }
 
+document.addEventListener("DOMContentLoaded", function(event) {
+    console.log("DOM fully loaded and parsed");
+    playAudio(hotspot.onEnterPlayAudio);
+  });
 //buildAudio();
-playAudio(hotspot.onEnterPlayAudio);
+
 </script>
 
 
