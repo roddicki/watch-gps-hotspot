@@ -34,6 +34,7 @@
     </div>
   </div>  
 </div>
+<audio id="player" src=""></audio>
 
 <script>
 var hotspot = {
@@ -181,7 +182,7 @@ function panMap(position){
 //CREATE AN AUDIO ELEMENT AND PLAY 
 function playAudio(track) {
     alert("playing audio");
-    var audio = document.getElementById('audio-player')
+    var audio = document.getElementById('player')
     audio.src = track;
     audio.play();
 }
