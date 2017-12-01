@@ -31,8 +31,7 @@
       <p id="demo"></p>
       <p id="msg"></p>
       <div id="mapholder"></div>
-      <audio controls id="player" src="WhiteChristmas.mp3"></audio>
-      <button onclick="playAudio(hotspot.onEnterPlayAudio)" type="button" class="btn-info">Primary</button>
+      <button type="button" onclick="playAudio(hotspot.onEnterPlayAudio)" class="btn-primary">I am here</button>
     </div>
   </div>  
 </div>
@@ -184,7 +183,7 @@ function panMap(position){
 //CREATE AN AUDIO ELEMENT AND PLAY 
 function playAudio(track) {
     alert("playing audio");
-    var audio = document.getElementById('player')
+    var audio = document.getElementById('audio-player')
     audio.src = track;
     audio.play();
 }
@@ -223,11 +222,8 @@ function displayPositionCoords(position) {
   x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br><br>";
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    console.log("DOM fully loaded and parsed");
-    playAudio(hotspot.onEnterPlayAudio);
-  });
-//buildAudio();
+
+buildAudio();
 
 </script>
 
